@@ -3,9 +3,18 @@ package br.com.microservices.orchestrated.orchestratorservice.core.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
+/**
+ * Created by
+ *
+ * @project: Java_Kafka
+ * @author: diegohaefliger
+ * @Date: 15/05/2024
+ */
+
+
 @AllArgsConstructor
-public enum ETopics {
+@Getter
+public enum TopicsEnum {
 
     START_SAGA("start-saga"),
     BASE_ORCHESTRATOR("orchestrator"),
@@ -17,7 +26,8 @@ public enum ETopics {
     PAYMENT_FAIL("payment-fail"),
     INVENTORY_SUCCESS("inventory-success"),
     INVENTORY_FAIL("inventory-fail"),
-    NOTIFY_ENDING("notify-ending");
+    NOTIFTY_ENDING("notify-ending");
 
     private final String topic;
+
 }
