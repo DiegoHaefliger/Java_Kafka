@@ -1,5 +1,6 @@
 package br.com.microservices.orchestrated.orchestratorservice.core.consumer;
 
+import br.com.microservices.orchestrated.orchestratorservice.core.service.OrchestrationService;
 import br.com.microservices.orchestrated.orchestratorservice.core.utils.JsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 public class SagaOrchestratorConsumer {
 
     private final JsonUtil jsonUtil;
+    private final OrchestrationService orchestrationService;
 
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
@@ -28,7 +30,8 @@ public class SagaOrchestratorConsumer {
     public void consumeStartSagaEvent(String payload) {
         log.info("Receiving event {} from start-saga topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event: {}", event.toString());
+
+        orchestrationService.startSaga(event);
     }
 
     @KafkaListener(
@@ -38,7 +41,8 @@ public class SagaOrchestratorConsumer {
     public void consumeOrchestratorEvent(String payload) {
         log.info("Receiving event {} from orchestrator topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event: {}", event.toString());
+
+        orchestrationService.continueSaga(event);
     }
 
     @KafkaListener(
@@ -48,7 +52,8 @@ public class SagaOrchestratorConsumer {
     public void consumeFinishSuccessEvent(String payload) {
         log.info("Receiving event {} from inish-success topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event: {}", event.toString());
+
+        orchestrationService.finishSagaSuccess(event);
     }
 
     @KafkaListener(
@@ -58,6 +63,7 @@ public class SagaOrchestratorConsumer {
     public void consumeFinishFailEvent(String payload) {
         log.info("Receiving event {} from inish-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info("Event: {}", event.toString());
+
+        orchestrationService.finishSagaFail(event);
     }
 }
